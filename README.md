@@ -1,2 +1,2 @@
-# r_tutorial
+# R Tutorials
 Tutorial introducing R
