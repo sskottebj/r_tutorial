@@ -1,9 +1,12 @@
 ---
 title: "A quick intro to R"
 output:
+  html_document:
+    toc: yes
+    df_print: paged
   pdf_document:
-    toc: true
-    number_sections: true
+    toc: yes
+    number_sections: yes
 ---
 
 \newpage
@@ -211,23 +214,24 @@ model1_augmented %>%
 
 
 ```{r, results='asis'} 
-# For html rendering
- # stargazer(model1, model2, 
- #           single.row = TRUE,
- #           type = "html",
- #           apply.coef = exp,
- #           header = FALSE,
- #            out = "test.html",
- #          report = "vc*")
+#For html rendering
+stargazer(model1, model2,
+          single.row = TRUE,
+          type = "html",
+          apply.coef = exp,
+          header = FALSE,
+           out = "test.html",
+         report = "vc*")
 ```
 
 ```{r, results='asis'}
-stargazer(model1, model2, 
-          single.row = TRUE,
-          type = "latex",
-          apply.coef = exp,
-          header = FALSE,
-          report = "vc*")
+# For pdf rendering
+# stargazer(model1, model2, 
+#           single.row = TRUE,
+#           type = "latex",
+#           apply.coef = exp,
+#           header = FALSE,
+#           report = "vc*")
 ```
 
 Note that output can be saved in .tex and copied to latex
