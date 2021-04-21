@@ -1,0 +1,253 @@
+---
+title: "A quick intro to R"
+output:
+  html_document:
+    toc: yes
+    df_print: paged
+---
+
+
+
+# Load packages
+
+
+```{r, warning=FALSE,  message = FALSE}
+# install.packages("MASS") first if not already installed.
+library(MASS) # Dataset
+library(tidyverse) # Datamanipulation & plots
+library(broom) # Functions to extract model statistics and parameters
+library(stargazer) # Tables for statistical models
+library(naniar) # Visualizing missing data
+```
+
+# Working in R/RStudio
+
+# View data
+
+
+Bemærk `tidyverse` (`dplyr`) "overskriver" en række funktioner fra pakkerne `stats` og `MASS`
+
+This data frame contains the responses of 237 Statistics I students at the University of Adelaide to a number of questions.
+
+
+```{r}
+head(survey)
+```
+\pagebreak
+
+# Datamanipulation
+
+## Filter (Row-operations)
+
+
+```{r}
+survey %>% 
+  filter(Smoke == "Never") %>% # R er case-sensitive
+  head()
+```
+```{r}
+survey %>% 
+  filter(Pulse > 70) %>% 
+  head()
+```
+Kombiner
+
+```{r}
+survey %>% 
+  filter(Pulse > 70 & Smoke == "Never") %>% 
+  head()
+```
+
+# Load and save data
+
+TODO write_csv, read_csv
+
+## Select (Column-operations)
+
+```{r}
+survey %>% 
+  select(Fold:Clap) %>% 
+  head()
+```
+
+```{r}
+survey %>% 
+  select(ends_with("Hnd")) %>% 
+  head()
+```
+\pagebreak
+
+# Visuzalize missing data
+
+
+```{r}
+vis_miss(survey)
+```
+\pagebreak
+
+# Statistical modeling
+
+
+## Remove missing
+
+```{r}
+estimation_data <- 
+  survey %>% 
+  select(-Pulse, -M.I, - Height) %>% # Remove columns
+  filter(!if_any(everything(),
+                    ~ is.na(.)
+                 )) # Remove obs with any missing
+estimation_data %>% head()
+```
+
+```{r}
+estimation_data %>% 
+  count(W.Hnd) %>% 
+  mutate(share = n / sum(n))
+```
+
+## Visualize data
+
+```{r}
+estimation_data %>% 
+  mutate(W.Hnd_numeric = W.Hnd %>% as.numeric() - 1 ) %>% # Make variable 0-based
+  ggplot(aes(x = Age, y = W.Hnd_numeric)) +
+  geom_point() +
+  geom_smooth(method = "glm",
+               method.args = list(family = "binomial"),
+              se = FALSE)
+```
+
+## Run regression (logit)
+
+```{r}
+model1 <-
+  glm(formula = W.Hnd ~ Sex + Fold + Clap + Exer + Smoke + Age,
+    family = "binomial", 
+    data = estimation_data
+    )
+model1 # default output
+```
+
+```{r}
+model2 <-
+  glm(formula = W.Hnd ~ Sex + Clap + Exer + Smoke + Age,
+    family = "binomial", 
+    data = estimation_data
+    )
+```
+
+## Single row model summary
+
+```{r}
+glance(model1)
+```
+## Coeffecient and relevant statistics in dataframe
+
+Get coeffecients etc.
+
+If your right hand is on top when you clap, the odds are 14:1 that right is your writing hand rather than the left.
+
+```{r}
+model1 %>% 
+  tidy(exponentiate = TRUE) %>%  # Transforms estimates into odds
+  head()
+```
+
+## Variables for diagnostic check
+
+Add fitted values and residuals to each observation
+
+```{r}
+model1_augmented <-
+  model1 %>% 
+  augment(type.predict = "response") %>% # Get fitted probabilities
+  select(.fitted:.cooksd, everything()) # Reorder columns
+head(model1_augmented)
+```
+
+TODO: Add some diagnostic plots / analysis of .cooksd (Dobson and Barnett, )
+
+## Calibration plot
+
+How well do fitted values correspond to observed proportions?
+
+```{r}
+model1_augmented %>% 
+  mutate(W.Hnd_int = W.Hnd %>% as.integer() - 1) %>% 
+  ggplot(aes(x = .fitted, y = W.Hnd_int, col = Sex)) + 
+  geom_point(alpha = 0.3) + # Transparency of points
+  geom_abline(slope =  1, 
+              intercept = 0,
+              linetype = "dashed") + 
+  geom_smooth(se = FALSE) +  # loess smoother default
+  coord_cartesian(xlim = c(0,1),
+                  ylim = c(0,1)) +
+  labs(x = "Predicted",
+       y = "Observed")
+```
+
+Stratify further by exercise
+
+```{r, fig.width=4, fig.height=6, fig.align='center'}
+model1_augmented %>% 
+  mutate(W.Hnd_int = W.Hnd %>% as.integer() - 1) %>% 
+  ggplot(aes(x = .fitted, y = W.Hnd_int, col = Sex)) +
+  facet_wrap(~Exer, ncol = 1) + 
+  geom_point(alpha = 0.3) + # Transparency of points
+  geom_abline(slope =  1, 
+              intercept = 0,
+              linetype = "dashed") + 
+  geom_smooth(se = FALSE) +  # loess smoother default
+  coord_cartesian(xlim = c(0,1),
+                  ylim = c(0,1)) +
+  labs(x = "Predicted",
+       y = "Observed")
+```
+
+
+
+## Statistical tables for publication
+
+
+```{r, results='asis'} 
+#For html rendering
+stargazer(model1, model2,
+          single.row = TRUE,
+          type = "html",
+          apply.coef = exp,
+          header = FALSE,
+           #out = "test.html",
+         report = "vc*")
+```
+
+```{r, results='asis'}
+#For pdf rendering
+# stargazer(model1, model2,
+#           single.row = TRUE,
+#           type = "latex",
+#           apply.coef = exp,
+#           header = FALSE,
+#           report = "vc*")
+```
+
+Note that output can be saved in .tex and copied to latex
+
+# For loops?
+
+R and dplyr does not encourage the use of for loops (although it is possible).
+
+```{r}
+n = 0
+for (i in c(1,2,3)) {
+  n = i + 1
+  print(n)
+}
+```
+
+
+# Errors/debugging
+
+Copy error message and google it.
+
+# Input/output

@@ -1,9 +1,9 @@
 {
     "id": "F8322058",
-    "path": "~/r_projects/r_intro/r_tutorial/index.Rmd",
-    "project_path": "index.Rmd",
+    "path": "~/r_projects/r_intro/r_tutorial/docs/index.Rmd",
+    "project_path": "docs/index.Rmd",
     "type": "r_markdown",
-    "hash": "1456198108",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1619034214016.0,
@@ -14,15 +14,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "6,59",
+        "cursorPosition": "4,0",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1619034283,
+    "lastKnownWriteTime": 1619038027,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1619034283231,
+    "last_content_update": 1619038027748,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>A quick intro to R</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Introducing R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="survey_demo.html">A quick intro to R</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">A quick intro to R</h1>
+
+</div>
+
+
+<div style="page-break-after: always;"></div>
+<div id="load-packages" class="section level1">
+<h1>Load packages</h1>
+<pre class="r"><code># install.packages(&quot;MASS&quot;) first if not already installed.
+library(MASS) # Dataset
+library(tidyverse) # Datamanipulation &amp; plots
+library(broom) # Functions to extract model statistics and parameters
+library(stargazer) # Tables for statistical models
+library(naniar) # Visualizing missing data</code></pre>
+</div>
+<div id="working-in-rrstudio" class="section level1">
+<h1>Working in R/RStudio</h1>
+</div>
+<div id="view-data" class="section level1">
+<h1>View data</h1>
+<p>Bemærk <code>tidyverse</code> (<code>dplyr</code>) “overskriver” en række funktioner fra pakkerne <code>stats</code> og <code>MASS</code></p>
+<p>This data frame contains the responses of 237 Statistics I students at the University of Adelaide to a number of questions.</p>
+<pre class="r"><code>head(survey)</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer
+## 1 Female   18.5   18.0 Right  R on L    92    Left Some
+## 2   Male   19.5   20.5  Left  R on L   104    Left None
+## 3   Male   18.0   13.3 Right  L on R    87 Neither None
+## 4   Male   18.8   18.9 Right  R on L    NA Neither None
+## 5   Male   20.0   20.0 Right Neither    35   Right Some
+## 6 Female   18.0   17.7 Right  L on R    64   Right Some
+##   Smoke Height      M.I    Age
+## 1 Never 173.00   Metric 18.250
+## 2 Regul 177.80 Imperial 17.583
+## 3 Occas     NA     &lt;NA&gt; 16.917
+## 4 Never 160.00   Metric 20.333
+## 5 Never 165.00   Metric 23.667
+## 6 Never 172.72 Imperial 21.000</code></pre>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="datamanipulation" class="section level1">
+<h1>Datamanipulation</h1>
+<div id="filter-row-operations" class="section level2">
+<h2>Filter (Row-operations)</h2>
+<pre class="r"><code>survey %&gt;% 
+  filter(Smoke == &quot;Never&quot;) %&gt;% # R er case-sensitive
+  head()</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer
+## 1 Female   18.5   18.0 Right  R on L    92    Left Some
+## 2   Male   18.8   18.9 Right  R on L    NA Neither None
+## 3   Male   20.0   20.0 Right Neither    35   Right Some
+## 4 Female   18.0   17.7 Right  L on R    64   Right Some
+## 5   Male   17.7   17.7 Right  L on R    83   Right Freq
+## 6 Female   17.0   17.3 Right  R on L    74   Right Freq
+##   Smoke Height      M.I    Age
+## 1 Never 173.00   Metric 18.250
+## 2 Never 160.00   Metric 20.333
+## 3 Never 165.00   Metric 23.667
+## 4 Never 172.72 Imperial 21.000
+## 5 Never 182.88 Imperial 18.833
+## 6 Never 157.00   Metric 35.833</code></pre>
+<pre class="r"><code>survey %&gt;% 
+  filter(Pulse &gt; 70) %&gt;% 
+  head()</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse    Clap Exer
+## 1 Female   18.5   18.0 Right R on L    92    Left Some
+## 2   Male   19.5   20.5  Left R on L   104    Left None
+## 3   Male   18.0   13.3 Right L on R    87 Neither None
+## 4   Male   17.7   17.7 Right L on R    83   Right Freq
+## 5 Female   17.0   17.3 Right R on L    74   Right Freq
+## 6   Male   20.0   19.5 Right R on L    72   Right Some
+##   Smoke Height      M.I    Age
+## 1 Never 173.00   Metric 18.250
+## 2 Regul 177.80 Imperial 17.583
+## 3 Occas     NA     &lt;NA&gt; 16.917
+## 4 Never 182.88 Imperial 18.833
+## 5 Never 157.00   Metric 35.833
+## 6 Never 175.00   Metric 19.000</code></pre>
+<p>Kombiner</p>
+<pre class="r"><code>survey %&gt;% 
+  filter(Pulse &gt; 70 &amp; Smoke == &quot;Never&quot;) %&gt;% 
+  head()</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse  Clap Exer Smoke
+## 1 Female   18.5   18.0 Right R on L    92  Left Some Never
+## 2   Male   17.7   17.7 Right L on R    83 Right Freq Never
+## 3 Female   17.0   17.3 Right R on L    74 Right Freq Never
+## 4   Male   20.0   19.5 Right R on L    72 Right Some Never
+## 5   Male   18.5   18.5 Right R on L    90 Right Some Never
+## 6 Female   17.0   17.2 Right L on R    80 Right Freq Never
+##   Height      M.I    Age
+## 1 173.00   Metric 18.250
+## 2 182.88 Imperial 18.833
+## 3 157.00   Metric 35.833
+## 4 175.00   Metric 19.000
+## 5 167.00   Metric 22.333
+## 6 156.20 Imperial 28.500</code></pre>
+</div>
+</div>
+<div id="load-and-save-data" class="section level1">
+<h1>Load and save data</h1>
+<p>TODO write_csv, read_csv</p>
+<div id="select-column-operations" class="section level2">
+<h2>Select (Column-operations)</h2>
+<pre class="r"><code>survey %&gt;% 
+  select(Fold:Clap) %&gt;% 
+  head()</code></pre>
+<pre><code>##      Fold Pulse    Clap
+## 1  R on L    92    Left
+## 2  R on L   104    Left
+## 3  L on R    87 Neither
+## 4  R on L    NA Neither
+## 5 Neither    35   Right
+## 6  L on R    64   Right</code></pre>
+<pre class="r"><code>survey %&gt;% 
+  select(ends_with(&quot;Hnd&quot;)) %&gt;% 
+  head()</code></pre>
+<pre><code>##   Wr.Hnd NW.Hnd W.Hnd
+## 1   18.5   18.0 Right
+## 2   19.5   20.5  Left
+## 3   18.0   13.3 Right
+## 4   18.8   18.9 Right
+## 5   20.0   20.0 Right
+## 6   18.0   17.7 Right</code></pre>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div id="visuzalize-missing-data" class="section level1">
+<h1>Visuzalize missing data</h1>
+<pre class="r"><code>vis_miss(survey)</code></pre>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-8-1.png" width="672" /> </p>
+</div>
+<div id="statistical-modeling" class="section level1">
+<h1>Statistical modeling</h1>
+<div id="remove-missing" class="section level2">
+<h2>Remove missing</h2>
+<pre class="r"><code>estimation_data &lt;- 
+  survey %&gt;% 
+  select(-Pulse, -M.I, - Height) %&gt;% # Remove columns
+  filter(!if_any(everything(),
+                    ~ is.na(.)
+                 )) # Remove obs with any missing
+estimation_data %&gt;% head()</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold    Clap Exer Smoke
+## 1 Female   18.5   18.0 Right  R on L    Left Some Never
+## 2   Male   19.5   20.5  Left  R on L    Left None Regul
+## 3   Male   18.0   13.3 Right  L on R Neither None Occas
+## 4   Male   18.8   18.9 Right  R on L Neither None Never
+## 5   Male   20.0   20.0 Right Neither   Right Some Never
+## 6 Female   18.0   17.7 Right  L on R   Right Some Never
+##      Age
+## 1 18.250
+## 2 17.583
+## 3 16.917
+## 4 20.333
+## 5 23.667
+## 6 21.000</code></pre>
+<pre class="r"><code>estimation_data %&gt;% 
+  count(W.Hnd) %&gt;% 
+  mutate(share = n / sum(n))</code></pre>
+<pre><code>##   W.Hnd   n      share
+## 1  Left  17 0.07296137
+## 2 Right 216 0.92703863</code></pre>
+</div>
+<div id="visualize-data" class="section level2">
+<h2>Visualize data</h2>
+<pre class="r"><code>estimation_data %&gt;% 
+  mutate(W.Hnd_numeric = W.Hnd %&gt;% as.numeric() - 1 ) %&gt;% # Make variable 0-based
+  ggplot(aes(x = Age, y = W.Hnd_numeric)) +
+  geom_point() +
+  geom_smooth(method = &quot;glm&quot;,
+               method.args = list(family = &quot;binomial&quot;),
+              se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="run-regression-logit" class="section level2">
+<h2>Run regression (logit)</h2>
+<pre class="r"><code>model1 &lt;-
+  glm(formula = W.Hnd ~ Sex + Fold + Clap + Exer + Smoke + Age,
+    family = &quot;binomial&quot;, 
+    data = estimation_data
+    )
+model1 # default output</code></pre>
+<pre><code>## 
+## Call:  glm(formula = W.Hnd ~ Sex + Fold + Clap + Exer + Smoke + Age, 
+##     family = &quot;binomial&quot;, data = estimation_data)
+## 
+## Coefficients:
+## (Intercept)      SexMale  FoldNeither   FoldR on L  
+##     -3.0842      -0.5394      -0.3136       0.7742  
+## ClapNeither    ClapRight     ExerNone     ExerSome  
+##      1.4995       2.6437      -1.0641      -0.8508  
+##  SmokeNever   SmokeOccas   SmokeRegul          Age  
+##      0.1037      -0.9415       0.7269       0.2390  
+## 
+## Degrees of Freedom: 232 Total (i.e. Null);  221 Residual
+## Null Deviance:       121.7 
+## Residual Deviance: 95.17     AIC: 119.2</code></pre>
+<pre class="r"><code>model2 &lt;-
+  glm(formula = W.Hnd ~ Sex + Clap + Exer + Smoke + Age,
+    family = &quot;binomial&quot;, 
+    data = estimation_data
+    )</code></pre>
+</div>
+<div id="single-row-model-summary" class="section level2">
+<h2>Single row model summary</h2>
+<pre class="r"><code>glance(model1)</code></pre>
+<pre><code>## # A tibble: 1 x 8
+##   null.deviance df.null logLik   AIC   BIC deviance
+##           &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1          122.     232  -47.6  119.  161.     95.2
+## # ... with 2 more variables: df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+<div id="coeffecient-and-relevant-statistics-in-dataframe" class="section level2">
+<h2>Coeffecient and relevant statistics in dataframe</h2>
+<p>Get coeffecients etc.</p>
+<p>If your right hand is on top when you clap, the odds are 14:1 that right is your writing hand rather than the left.</p>
+<pre class="r"><code>model1 %&gt;% 
+  tidy(exponentiate = TRUE) %&gt;%  # Transforms estimates into odds
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   0.0458     3.88     -0.794 0.427   
+## 2 SexMale       0.583      0.586    -0.920 0.358   
+## 3 FoldNeither   0.731      1.18     -0.265 0.791   
+## 4 FoldR on L    2.17       0.589     1.31  0.189   
+## 5 ClapNeither   4.48       0.712     2.11  0.0351  
+## 6 ClapRight    14.1        0.694     3.81  0.000140</code></pre>
+</div>
+<div id="variables-for-diagnostic-check" class="section level2">
+<h2>Variables for diagnostic check</h2>
+<p>Add fitted values and residuals to each observation</p>
+<pre class="r"><code>model1_augmented &lt;-
+  model1 %&gt;% 
+  augment(type.predict = &quot;response&quot;) %&gt;% # Get fitted probabilities
+  select(.fitted:.cooksd, everything()) # Reorder columns
+head(model1_augmented)</code></pre>
+<pre><code>## # A tibble: 6 x 13
+##   .fitted .resid .std.resid   .hat .sigma   .cooksd W.Hnd
+##     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;
+## 1   0.787  0.693      0.717 0.0650  0.656 0.00168   Right
+## 2   0.734 -1.63      -1.99  0.332   0.644 0.171     Left 
+## 3   0.478  1.21       1.45  0.294   0.650 0.0537    Right
+## 4   0.927  0.388      0.402 0.0694  0.657 0.000522  Right
+## 5   0.974  0.230      0.237 0.0509  0.658 0.000127  Right
+## 6   0.979  0.207      0.209 0.0168  0.658 0.0000314 Right
+## # ... with 6 more variables: Sex &lt;fct&gt;, Fold &lt;fct&gt;,
+## #   Clap &lt;fct&gt;, Exer &lt;fct&gt;, Smoke &lt;fct&gt;, Age &lt;dbl&gt;</code></pre>
+<p>TODO: Add some diagnostic plots / analysis of .cooksd (Dobson and Barnett, )</p>
+</div>
+<div id="calibration-plot" class="section level2">
+<h2>Calibration plot</h2>
+<p>How well do fitted values correspond to observed proportions?</p>
+<pre class="r"><code>model1_augmented %&gt;% 
+  mutate(W.Hnd_int = W.Hnd %&gt;% as.integer() - 1) %&gt;% 
+  ggplot(aes(x = .fitted, y = W.Hnd_int, col = Sex)) + 
+  geom_point(alpha = 0.3) + # Transparency of points
+  geom_abline(slope =  1, 
+              intercept = 0,
+              linetype = &quot;dashed&quot;) + 
+  geom_smooth(se = FALSE) +  # loess smoother default
+  coord_cartesian(xlim = c(0,1),
+                  ylim = c(0,1)) +
+  labs(x = &quot;Predicted&quot;,
+       y = &quot;Observed&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Stratify further by exercise</p>
+<pre class="r"><code>model1_augmented %&gt;% 
+  mutate(W.Hnd_int = W.Hnd %&gt;% as.integer() - 1) %&gt;% 
+  ggplot(aes(x = .fitted, y = W.Hnd_int, col = Sex)) +
+  facet_wrap(~Exer, ncol = 1) + 
+  geom_point(alpha = 0.3) + # Transparency of points
+  geom_abline(slope =  1, 
+              intercept = 0,
+              linetype = &quot;dashed&quot;) + 
+  geom_smooth(se = FALSE) +  # loess smoother default
+  coord_cartesian(xlim = c(0,1),
+                  ylim = c(0,1)) +
+  labs(x = &quot;Predicted&quot;,
+       y = &quot;Observed&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-18-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="statistical-tables-for-publication" class="section level2">
+<h2>Statistical tables for publication</h2>
+<pre class="r"><code>#For html rendering
+stargazer(model1, model2,
+          single.row = TRUE,
+          type = &quot;html&quot;,
+          apply.coef = exp,
+          header = FALSE,
+           #out = &quot;test.html&quot;,
+         report = &quot;vc*&quot;)</code></pre>
+<table style="text-align:center">
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+<em>Dependent variable:</em>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td colspan="2" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td colspan="2">
+W.Hnd
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+</td>
+<td>
+(1)
+</td>
+<td>
+(2)
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+SexMale
+</td>
+<td>
+0.583
+</td>
+<td>
+0.539
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+FoldNeither
+</td>
+<td>
+0.731
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+FoldR on L
+</td>
+<td>
+2.169<sup>***</sup>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ClapNeither
+</td>
+<td>
+4.479<sup>***</sup>
+</td>
+<td>
+4.013<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ClapRight
+</td>
+<td>
+14.065<sup>***</sup>
+</td>
+<td>
+12.031<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ExerNone
+</td>
+<td>
+0.345
+</td>
+<td>
+0.364
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+ExerSome
+</td>
+<td>
+0.427
+</td>
+<td>
+0.471
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+SmokeNever
+</td>
+<td>
+1.109
+</td>
+<td>
+1.235
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+SmokeOccas
+</td>
+<td>
+0.390
+</td>
+<td>
+0.450
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+SmokeRegul
+</td>
+<td>
+2.069
+</td>
+<td>
+2.518
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Age
+</td>
+<td>
+1.270<sup>***</sup>
+</td>
+<td>
+1.249<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Constant
+</td>
+<td>
+0.046
+</td>
+<td>
+0.086
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Observations
+</td>
+<td>
+233
+</td>
+<td>
+233
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Log Likelihood
+</td>
+<td>
+-47.587
+</td>
+<td>
+-48.620
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Akaike Inf. Crit.
+</td>
+<td>
+119.175
+</td>
+<td>
+117.240
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+<em>Note:</em>
+</td>
+<td colspan="2" style="text-align:right">
+<sup><em></sup>p&lt;0.1; <sup><strong></sup>p&lt;0.05; <sup></strong></em></sup>p&lt;0.01
+</td>
+</tr>
+</table>
+<pre class="r"><code>#For pdf rendering
+# stargazer(model1, model2,
+#           single.row = TRUE,
+#           type = &quot;latex&quot;,
+#           apply.coef = exp,
+#           header = FALSE,
+#           report = &quot;vc*&quot;)</code></pre>
+<p>Note that output can be saved in .tex and copied to latex</p>
+</div>
+</div>
+<div id="for-loops" class="section level1">
+<h1>For loops?</h1>
+<p>R and dplyr does not encourage the use of for loops (although it is possible).</p>
+<pre class="r"><code>n = 0
+for (i in c(1,2,3)) {
+  n = i + 1
+  print(n)
+}</code></pre>
+<pre><code>## [1] 2
+## [1] 3
+## [1] 4</code></pre>
+</div>
+<div id="errorsdebugging" class="section level1">
+<h1>Errors/debugging</h1>
+<p>Copy error message and google it.</p>
+</div>
+<div id="inputoutput" class="section level1">
+<h1>Input/output</h1>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

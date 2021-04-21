@@ -1,12 +1,10 @@
- name: "r_tutorial"
-output_dir: "docs"
+name: "r_tutorial"
 navbar:
-  title: "Introduction to R"
+  title: "Introducing R"
   left:
-  - text: "Home"
-   href: index.html
-  - text: "intro to R"
-   href: intro_to_r.html
-output:
-  html_document:
- theme: cosmo
+    - text: "Home"
+      href: index.html
+    - text: "A quick intro to R"
+      href: survey_demo.html
+    - text: "About"
+      href: about.html

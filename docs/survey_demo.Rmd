@@ -1,17 +1,5 @@
 ---
 title: "A quick intro to R"
-knit: (function(input_file, encoding) {
-  out_dir <- 'docs';
-  rmarkdown::render(input_file,
- encoding=encoding,
- output_file=file.path(dirname(input_file), out_dir, 'intro_to_r.html'))})
-output:
-  html_document:
-    toc: yes
-    df_print: paged
-  pdf_document:
-    toc: yes
-    number_sections: yes
 ---
 
 \newpage
