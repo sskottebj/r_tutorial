@@ -1,4 +1,127 @@
 ---
-title: "bfd"
+title: "Oversigt og ressourcer"
 ---
 
+R er et program udviklet til statistisk analyse, men kan nu bruges til en lang række formål, herunder laves apps, hjemmesider, 
+
+En åbenlys fordel ved R i forhold til en lang række andre tilsvarende programmer (for eksempelvis SAS, Stata og SPSS) er at det er gratis. Derfor dukker R også typisk op som en mulighed når både private virksomheder og offentlige institutioner ser på omkostningerne forbundet med dyre licenser. R bruges i forskningsverdenen og kan samtidig tale sammen med andre open-source SQL-baserede databaser.
+
+Denne side tjener som en inspiration og indgang til R. Siden er primært rettet mod ansatte i Staten, men meget information vil være generelt og kan benyttes af enhver, som er intresseret i at lære R - eller i hvert fald finde gode kilder til materiale. 
+
+Man kan sagtens installere R og laver sine analyser uden at installere noget som helst andet. De fleste foretrække dog at bruge en IDE (Integrated Development Environment) og her er RStudio nok det mest populære. RStudio kan som udgangspunkt bruges gratis, selvom der også findes løsninger man kan betale for. Firmaet bag RStudio hedder i øvrigt RStudio.
+
+Udover RStudio står folkene bag RStudio står bag en lang række ressourcer, som gør R nemmere og mere attraktivt at bruge. Det er eksempelvis pakker til datamanipulation, datavisualisering, machine learning, opsætning af hjemmesider og en lang række andre ting.
+
+
+
+# Installation
+
+# Læring
+
+https://csgillespie.github.io/efficientR/learning.html#learning-in-depth
+
+# Interaktiv læring
+
+
+
+
+# Lærebøger
+
+Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R for Data Science". Hvis du vil lære R, så skim et kapitel hver uge og få et overblik over hvad man kan i R og hvordan det kan gøres. Bogen er godt skrevet og dækker en lang række temaer, som man ikke kommer udenom når man bruger R. Det eneste du kommer til at fortryde ved at læse i denne bog er, at du ikke startede med at læse i den noget før.
+
+## Data Science
+
+R for Data Science
+https://r4ds.had.co.nz/
+
+## Style guide
+
+https://style.tidyverse.org/
+
+Blandt andet fejlmeddelelser.
+
+## Avanceret programmering
+
+Dybereluggnede koncepter i programmering 
+https://adv-r.hadley.nz/
+
+Efficient programmering i R
+https://csgillespie.github.io/efficientR/
+
+https://r-pkgs.org/ 
+
+## Datavisualisering
+
+https://clauswilke.com/dataviz/
+
+https://socviz.co/
+
+https://r-graphics.org/
+
+
+## Statistik
+
+### Tidsserier
+
+https://otexts.com/fpp2/
+
+### Økonometri
+
+https://www.econometrics-with-r.org/
+
+###  Causal inference
+
+Causal inference: The mixtape
+https://mixtape.scunning.com/dag.html
+
+https://cdn1.sph.harvard.edu/wp-content/uploads/sites/1268/2021/03/ciwhatif_hernanrobins_30mar21.pdf
+
+
+## Machine Learning
+
+Tidy Modeling with R
+https://www.tmwr.org/
+
+An Introduction to statistical Learning
+https://www.statlearning.com/ (gratis pdf på hjemmesiden)
+
+Feature Engineering and Selection: A Practical Approach for Predictive Models 
+http://www.feat.engineering/
+Tip: Hvis du er interesseret i prædiktiv modellering / machine learning, så læs kapitel 1-3 for et overblik over modelleringsprocessen. 
+
+Targeted learning in R
+https://tlverse.org/tlverse-handbook/index.html
+Causal inference med machine learning
+
+Interpretable Machine Learning 
+https://christophm.github.io/interpretable-ml-book/
+
+Exploratory Model Analysis
+https://ema.drwhy.ai/
+
+## Text mining
+
+https://geocompr.robinlovelace.net/
+
+## Rapportering (RMarkdown)
+
+RMarkdown
+
+https://bookdown.org/yihui/rmarkdown/
+
+Skriv bøger
+
+https://bookdown.org/yihui/bookdown/
+
+Lav hjemmesider
+
+https://bookdown.org/yihui/blogdown/
+
+## Shiny
+
+https://engineering-shiny.org/
+
+## Kort / Geocomputation
+
+https://geocompr.robinlovelace.net/
+ 

@@ -2,3 +2,6 @@
 title: "About"
 output: html_document
 ---
+
+Denne side er lavet af Søren Skotte Bjerregaard
+
