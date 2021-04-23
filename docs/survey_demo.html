@@ -29,6 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -218,6 +221,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -225,6 +291,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -266,36 +342,6 @@ $(document).ready(function () {
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#load-packages">Load packages</a></li>
-<li><a href="#working-in-rrstudio">Working in R/RStudio</a></li>
-<li><a href="#view-data">View data</a></li>
-<li><a href="#datamanipulation">Datamanipulation</a>
-<ul>
-<li><a href="#filter-row-operations">Filter (Row-operations)</a></li>
-</ul></li>
-<li><a href="#load-and-save-data">Load and save data</a>
-<ul>
-<li><a href="#select-column-operations">Select (Column-operations)</a></li>
-</ul></li>
-<li><a href="#visuzalize-missing-data">Visuzalize missing data</a></li>
-<li><a href="#statistical-modeling">Statistical modeling</a>
-<ul>
-<li><a href="#remove-missing">Remove missing</a></li>
-<li><a href="#visualize-data">Visualize data</a></li>
-<li><a href="#run-regression-logit">Run regression (logit)</a></li>
-<li><a href="#single-row-model-summary">Single row model summary</a></li>
-<li><a href="#coeffecient-and-relevant-statistics-in-dataframe">Coeffecient and relevant statistics in dataframe</a></li>
-<li><a href="#variables-for-diagnostic-check">Variables for diagnostic check</a></li>
-<li><a href="#calibration-plot">Calibration plot</a></li>
-<li><a href="#statistical-tables-for-publication">Statistical tables for publication</a></li>
-</ul></li>
-<li><a href="#for-loops">For loops?</a></li>
-<li><a href="#errorsdebugging">Errors/debugging</a></li>
-<li><a href="#inputoutput">Input/output</a></li>
-</ul>
-</div>
 
 <div style="page-break-after: always;"></div>
 <div id="load-packages" class="section level1">
@@ -315,20 +361,20 @@ library(naniar) # Visualizing missing data</code></pre>
 <p>Bemærk <code>tidyverse</code> (<code>dplyr</code>) “overskriver” en række funktioner fra pakkerne <code>stats</code> og <code>MASS</code></p>
 <p>This data frame contains the responses of 237 Statistics I students at the University of Adelaide to a number of questions.</p>
 <pre class="r"><code>head(survey)</code></pre>
-<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer Smoke Height
-## 1 Female   18.5   18.0 Right  R on L    92    Left Some Never 173.00
-## 2   Male   19.5   20.5  Left  R on L   104    Left None Regul 177.80
-## 3   Male   18.0   13.3 Right  L on R    87 Neither None Occas     NA
-## 4   Male   18.8   18.9 Right  R on L    NA Neither None Never 160.00
-## 5   Male   20.0   20.0 Right Neither    35   Right Some Never 165.00
-## 6 Female   18.0   17.7 Right  L on R    64   Right Some Never 172.72
-##        M.I    Age
-## 1   Metric 18.250
-## 2 Imperial 17.583
-## 3     &lt;NA&gt; 16.917
-## 4   Metric 20.333
-## 5   Metric 23.667
-## 6 Imperial 21.000</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer Smoke Height      M.I
+## 1 Female   18.5   18.0 Right  R on L    92    Left Some Never 173.00   Metric
+## 2   Male   19.5   20.5  Left  R on L   104    Left None Regul 177.80 Imperial
+## 3   Male   18.0   13.3 Right  L on R    87 Neither None Occas     NA     &lt;NA&gt;
+## 4   Male   18.8   18.9 Right  R on L    NA Neither None Never 160.00   Metric
+## 5   Male   20.0   20.0 Right Neither    35   Right Some Never 165.00   Metric
+## 6 Female   18.0   17.7 Right  L on R    64   Right Some Never 172.72 Imperial
+##      Age
+## 1 18.250
+## 2 17.583
+## 3 16.917
+## 4 20.333
+## 5 23.667
+## 6 21.000</code></pre>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="datamanipulation" class="section level1">
@@ -338,55 +384,55 @@ library(naniar) # Visualizing missing data</code></pre>
 <pre class="r"><code>survey %&gt;% 
   filter(Smoke == &quot;Never&quot;) %&gt;% # R er case-sensitive
   head()</code></pre>
-<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer Smoke Height
-## 1 Female   18.5   18.0 Right  R on L    92    Left Some Never 173.00
-## 2   Male   18.8   18.9 Right  R on L    NA Neither None Never 160.00
-## 3   Male   20.0   20.0 Right Neither    35   Right Some Never 165.00
-## 4 Female   18.0   17.7 Right  L on R    64   Right Some Never 172.72
-## 5   Male   17.7   17.7 Right  L on R    83   Right Freq Never 182.88
-## 6 Female   17.0   17.3 Right  R on L    74   Right Freq Never 157.00
-##        M.I    Age
-## 1   Metric 18.250
-## 2   Metric 20.333
-## 3   Metric 23.667
-## 4 Imperial 21.000
-## 5 Imperial 18.833
-## 6   Metric 35.833</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold Pulse    Clap Exer Smoke Height      M.I
+## 1 Female   18.5   18.0 Right  R on L    92    Left Some Never 173.00   Metric
+## 2   Male   18.8   18.9 Right  R on L    NA Neither None Never 160.00   Metric
+## 3   Male   20.0   20.0 Right Neither    35   Right Some Never 165.00   Metric
+## 4 Female   18.0   17.7 Right  L on R    64   Right Some Never 172.72 Imperial
+## 5   Male   17.7   17.7 Right  L on R    83   Right Freq Never 182.88 Imperial
+## 6 Female   17.0   17.3 Right  R on L    74   Right Freq Never 157.00   Metric
+##      Age
+## 1 18.250
+## 2 20.333
+## 3 23.667
+## 4 21.000
+## 5 18.833
+## 6 35.833</code></pre>
 <pre class="r"><code>survey %&gt;% 
   filter(Pulse &gt; 70) %&gt;% 
   head()</code></pre>
-<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse    Clap Exer Smoke Height
-## 1 Female   18.5   18.0 Right R on L    92    Left Some Never 173.00
-## 2   Male   19.5   20.5  Left R on L   104    Left None Regul 177.80
-## 3   Male   18.0   13.3 Right L on R    87 Neither None Occas     NA
-## 4   Male   17.7   17.7 Right L on R    83   Right Freq Never 182.88
-## 5 Female   17.0   17.3 Right R on L    74   Right Freq Never 157.00
-## 6   Male   20.0   19.5 Right R on L    72   Right Some Never 175.00
-##        M.I    Age
-## 1   Metric 18.250
-## 2 Imperial 17.583
-## 3     &lt;NA&gt; 16.917
-## 4 Imperial 18.833
-## 5   Metric 35.833
-## 6   Metric 19.000</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse    Clap Exer Smoke Height      M.I
+## 1 Female   18.5   18.0 Right R on L    92    Left Some Never 173.00   Metric
+## 2   Male   19.5   20.5  Left R on L   104    Left None Regul 177.80 Imperial
+## 3   Male   18.0   13.3 Right L on R    87 Neither None Occas     NA     &lt;NA&gt;
+## 4   Male   17.7   17.7 Right L on R    83   Right Freq Never 182.88 Imperial
+## 5 Female   17.0   17.3 Right R on L    74   Right Freq Never 157.00   Metric
+## 6   Male   20.0   19.5 Right R on L    72   Right Some Never 175.00   Metric
+##      Age
+## 1 18.250
+## 2 17.583
+## 3 16.917
+## 4 18.833
+## 5 35.833
+## 6 19.000</code></pre>
 <p>Kombiner</p>
 <pre class="r"><code>survey %&gt;% 
   filter(Pulse &gt; 70 &amp; Smoke == &quot;Never&quot;) %&gt;% 
   head()</code></pre>
-<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse  Clap Exer Smoke Height
-## 1 Female   18.5   18.0 Right R on L    92  Left Some Never 173.00
-## 2   Male   17.7   17.7 Right L on R    83 Right Freq Never 182.88
-## 3 Female   17.0   17.3 Right R on L    74 Right Freq Never 157.00
-## 4   Male   20.0   19.5 Right R on L    72 Right Some Never 175.00
-## 5   Male   18.5   18.5 Right R on L    90 Right Some Never 167.00
-## 6 Female   17.0   17.2 Right L on R    80 Right Freq Never 156.20
-##        M.I    Age
-## 1   Metric 18.250
-## 2 Imperial 18.833
-## 3   Metric 35.833
-## 4   Metric 19.000
-## 5   Metric 22.333
-## 6 Imperial 28.500</code></pre>
+<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd   Fold Pulse  Clap Exer Smoke Height      M.I
+## 1 Female   18.5   18.0 Right R on L    92  Left Some Never 173.00   Metric
+## 2   Male   17.7   17.7 Right L on R    83 Right Freq Never 182.88 Imperial
+## 3 Female   17.0   17.3 Right R on L    74 Right Freq Never 157.00   Metric
+## 4   Male   20.0   19.5 Right R on L    72 Right Some Never 175.00   Metric
+## 5   Male   18.5   18.5 Right R on L    90 Right Some Never 167.00   Metric
+## 6 Female   17.0   17.2 Right L on R    80 Right Freq Never 156.20 Imperial
+##      Age
+## 1 18.250
+## 2 18.833
+## 3 35.833
+## 4 19.000
+## 5 22.333
+## 6 28.500</code></pre>
 </div>
 </div>
 <div id="load-and-save-data" class="section level1">
@@ -472,12 +518,10 @@ model1 # default output</code></pre>
 ##     family = &quot;binomial&quot;, data = estimation_data)
 ## 
 ## Coefficients:
-## (Intercept)      SexMale  FoldNeither   FoldR on L  ClapNeither  
-##     -3.0842      -0.5394      -0.3136       0.7742       1.4995  
-##   ClapRight     ExerNone     ExerSome   SmokeNever   SmokeOccas  
-##      2.6437      -1.0641      -0.8508       0.1037      -0.9415  
-##  SmokeRegul          Age  
-##      0.7269       0.2390  
+## (Intercept)      SexMale  FoldNeither   FoldR on L  ClapNeither    ClapRight  
+##     -3.0842      -0.5394      -0.3136       0.7742       1.4995       2.6437  
+##    ExerNone     ExerSome   SmokeNever   SmokeOccas   SmokeRegul          Age  
+##     -1.0641      -0.8508       0.1037      -0.9415       0.7269       0.2390  
 ## 
 ## Degrees of Freedom: 232 Total (i.e. Null);  221 Residual
 ## Null Deviance:       121.7 
@@ -522,16 +566,15 @@ model1 # default output</code></pre>
   select(.fitted:.cooksd, everything()) # Reorder columns
 head(model1_augmented)</code></pre>
 <pre><code>## # A tibble: 6 x 13
-##   .fitted .resid .std.resid   .hat .sigma   .cooksd W.Hnd Sex    Fold   
-##     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1   0.787  0.693      0.717 0.0650  0.656 0.00168   Right Female R on L 
-## 2   0.734 -1.63      -1.99  0.332   0.644 0.171     Left  Male   R on L 
-## 3   0.478  1.21       1.45  0.294   0.650 0.0537    Right Male   L on R 
-## 4   0.927  0.388      0.402 0.0694  0.657 0.000522  Right Male   R on L 
-## 5   0.974  0.230      0.237 0.0509  0.658 0.000127  Right Male   Neither
-## 6   0.979  0.207      0.209 0.0168  0.658 0.0000314 Right Female L on R 
-## # ... with 4 more variables: Clap &lt;fct&gt;, Exer &lt;fct&gt;, Smoke &lt;fct&gt;,
-## #   Age &lt;dbl&gt;</code></pre>
+##   .fitted .resid .std.resid   .hat .sigma  .cooksd W.Hnd Sex   Fold  Clap  Exer 
+##     &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;
+## 1   0.787  0.693      0.717 0.0650  0.656  1.68e-3 Right Fema~ R on~ Left  Some 
+## 2   0.734 -1.63      -1.99  0.332   0.644  1.71e-1 Left  Male  R on~ Left  None 
+## 3   0.478  1.21       1.45  0.294   0.650  5.37e-2 Right Male  L on~ Neit~ None 
+## 4   0.927  0.388      0.402 0.0694  0.657  5.22e-4 Right Male  R on~ Neit~ None 
+## 5   0.974  0.230      0.237 0.0509  0.658  1.27e-4 Right Male  Neit~ Right Some 
+## 6   0.979  0.207      0.209 0.0168  0.658  3.14e-5 Right Fema~ L on~ Right Some 
+## # ... with 2 more variables: Smoke &lt;fct&gt;, Age &lt;dbl&gt;</code></pre>
 <p>TODO: Add some diagnostic plots / analysis of .cooksd (Dobson and Barnett, )</p>
 </div>
 <div id="calibration-plot" class="section level2">
@@ -829,6 +872,8 @@ for (i in c(1,2,3)) {
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -861,6 +906,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

@@ -54,9 +54,6 @@ survey %>%
   head()
 ```
 
-# Load and save data
-
-TODO write_csv, read_csv
 
 ## Select (Column-operations)
 
@@ -71,6 +68,12 @@ survey %>%
   select(ends_with("Hnd")) %>% 
   head()
 ```
+
+
+
+# Load and save data
+
+TODO write_csv, read_csv
 \pagebreak
 
 # Visuzalize missing data
