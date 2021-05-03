@@ -16,6 +16,7 @@ Udover RStudio står folkene bag RStudio står bag en lang række ressourcer, so
 
 # Installation
 
+
 # Læring
 
 https://csgillespie.github.io/efficientR/learning.html#learning-in-depth
@@ -27,7 +28,7 @@ https://csgillespie.github.io/efficientR/learning.html#learning-in-depth
 
 # Lærebøger
 
-Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R for Data Science". Hvis du vil lære R, så skim et kapitel hver uge og få et overblik over hvad man kan i R og hvordan det kan gøres. Bogen er godt skrevet og dækker en lang række temaer, som man ikke kommer udenom når man bruger R. Det eneste du kommer til at fortryde ved at læse i denne bog er, at du ikke startede med at læse i den noget før.
+Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R for Data Science". Hvis du vil lære R, så skim et kapitel hver uge og få et overblik over hvad man kan i R og hvordan det kan gøres. Bogen er godt skrevet og dækker en lang række temaer, som man ikke kommer udenom når man bruger R. 
 
 ## Data Science
 

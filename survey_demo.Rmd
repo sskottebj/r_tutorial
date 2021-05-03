@@ -1,11 +1,43 @@
 ---
-title: "A quick intro to R"
+title: "Kort introduktion til R"
 ---
 
 \newpage
 
+Dette er en kort introduktion til R. Formålet er at vise nogle af de ting man kan med R og samtidig vise, hvor man kan læse om mere.
+
+Overordnet, så introduceres kort:
+
+
+ - Basal datamanipulation, herunder
+   - Rækkeoperationer (observationer)
+   - Kolonneoperationer (variable)
+ - Indlæs og gem data
+ - Visualisering af missing data
+ - Intro til statistisk modellering, herunder:
+   - Fjern missing data
+   - Visualisering af data
+   - Kørsel af (logistisk) regression
+   - Oversigt af regressionsresultater
+   - Udtræk regressionsresultater i række fremfor objekt
+   - Udtræk af model-koefficienter og relevante statistics
+   - Udtræk af variable til model-diagnostik
+   - Kalibreringsplot
+   - Eksempel på statistik tabel til publikation
+  - For loops
+  - Tips til fejlmeddelelser og debugging
+
+Det forudsættes, at man har prøve at åbne R/RStudio og arbejder i RStudio. Hvis man vil reproducere / følge beskrivelsen her, så kan man kopiere kodestykkerne ind i sit eget R-scripts eller Rmarkdown.
+
 # Load packages
 
+I "base"-R - altså den udgave, som kommer med installationen - ligger en masse muligheder for data-manipulation og statistisk analyse. Der bliver dog hele tiden udviklet nye funktioner/funktionaliteter, som løser forskellige typer af problemer, som R-bruger støder på. Mange af disse løsninger deles i pakker, som gratis kan hentes fra nettet. Det kræver følgende: Først skal pakken installeres. Herefter skal pakken hentesn fra dit lokale pakke-bibliotek.
+
+En pakke installeres ved at eksempelvis at skrive ´install.packages("MASS")´. Man behøver kun installere en pakke en gang. Hvis man vil hente nye opdateringer til pakken skal den dog installeres igen.
+
+Efter pakken er installeret kan man indlæse pakke i ens R-session ved at skrive ´library(MASS)´. Det er god praksis at indlæse sine pakker i starten af sit program. 
+
+I dette program indlæses pakkerne som vist nedenfor:
 
 ```{r, warning=FALSE,  message = FALSE}
 # install.packages("MASS") first if not already installed.
@@ -16,37 +48,59 @@ library(stargazer) # Tables for statistical models
 library(naniar) # Visualizing missing data
 ```
 
-# Working in R/RStudio
+Som i mange andre programmer kan man "udkommentere" kode. I R gør man det ved at indsætte ´#´ foran sin kode som vist ovenfor.
+
+Bemærk i øvrigt at `tidyverse` (`dplyr`) "overskriver" en række funktioner fra pakkerne `stats` og `MASS`
 
 # View data
 
-
-Bemærk `tidyverse` (`dplyr`) "overskriver" en række funktioner fra pakkerne `stats` og `MASS`
+I pakken ´MASS´ ligger datasættet `survey`. Skrive man `?survey` i sin konsol og trykker enter, kommer følgende beskrivelse frem:
 
 This data frame contains the responses of 237 Statistics I students at the University of Adelaide to a number of questions.
 
+Med `head` funktionen, kan vi udskrive de første 6 observationer fra datasættet og at gå en ide om, hvad datasættet indeholder. 
 
 ```{r}
 head(survey)
 ```
+
+Alternativt kan man skrive 
+
+```{r}
+df <- head(survey)
+```
+
+Og trykke på datasættet ´df´ i ens "Environment".
+
 \pagebreak
 
 # Datamanipulation
 
-## Filter (Row-operations)
+De tre mest populære tilgange til datamanipulation i R er `base`, `tidyverse` og `data.table`. `tidyverse` læner sig forholdvis tæt op af SQL og syntaksen er forholdsvis nem at lære. Selvom det kan være nyttigt at kende lidt til de andre tilgange, så er ´tidyverse´ et godt udgangspunkt.
 
+Datamanipulation er et bredt emne. En af de bedste bøger, som gratis kan læses på nettet er R for Data Science (https://r4ds.had.co.nz/). For at komme igang er det dog typisk nyttigt at kunne lave simple række- og kolonneoperationer. 
+
+## filter (Row-operations)
+
+Rækkeoperationer kan laves med ´filter´-funktionen. Nedenfor vælges kun rygere:
 
 ```{r}
 survey %>% 
   filter(Smoke == "Never") %>% # R er case-sensitive
   head()
 ```
+
+Bemærk, at equal i R består af to == (i modsætning til eksempelvis SAS, hvor man skriver = eller eq)
+
+Eksemplet nedenfor vælger observationer, hvor kravet er en målt puls, som er større en 70:
+
 ```{r}
 survey %>% 
   filter(Pulse > 70) %>% 
   head()
 ```
-Kombiner
+
+Betingelser kan nemt kobles sammen som i de fleste andre programmeringssprog:
 
 ```{r}
 survey %>% 
@@ -55,7 +109,19 @@ survey %>%
 ```
 
 
-## Select (Column-operations)
+### %>% (Pipe-operatoren) 
+
+Den mærkelige kombination ´%>%´ er en pipe-operator, som kæder koden sammen. Det fungerer ved at det som står op venstresiden/over, bliver indsæt som første argument i næste funktion. For eksempel kan koden ovenfor også skrives som, men koden bliver sværere at læse, fordi man skal læse indefra og ud fremfor fra venstre mod højre (som man normalt læser). ´%>%´kan altså kæden flere funktioner sammen i et mere læseligt format, som gør det nemmere både at skrive og læse koden. På Windows har ´%>%´ short-cuttet Ctrl+Shift+m. Et tip er at lave en post-it med short-cuttet, som man sætter nederst på sin skærm indtil man husker det udenad (det er i øvrigt et godt trick til at lære short-cuts generelt)
+
+```{r}
+head(filter(survey, Pulse > 70 & Smoke == "Never"))
+```
+
+
+
+## select (Column-operations)
+
+´select´-funktionen kan bruges til at manipulere variablene/kolonnerne i ens datasæt. Denne funktion er meget fleksibel og an kombineres med andre funktioner. Nedenfor vises hvordan man vælger variablene fra om med `Fold` til og med `Clap` i forhold til den rækkefølge, som variablene ligger i:
 
 ```{r}
 survey %>% 
@@ -63,12 +129,33 @@ survey %>%
   head()
 ```
 
+Hvis man vil fravælge variable, kan man sætte et - foran:
+
+```{r}
+survey %>% 
+  select(-(Fold:Clap)) %>% 
+  head()
+```
+
+Man kan også vælge afhængigt af hvad variablene eksempelvis ender på:
+
 ```{r}
 survey %>% 
   select(ends_with("Hnd")) %>% 
   head()
 ```
 
+De er tilsvarende funktioner, som hedder `starts_with`, `contains`, `matches` og `num_range`. Ved at skrive `?starts_with` i konsolen og trykke enter, kan man læse mere om funktionerne.
+
+Endelig kan man bytte om på rækkefølgen af variablene:
+
+```{r}
+survey %>% 
+  select(Age, Smoke, everything()) %>% 
+  head()
+```
+
+Funktionen `everything` tager resten af observationerne i den oprindelige rækkefølge og sætter efter `Age` og `Smoke`.
 
 
 # Load and save data
@@ -135,6 +222,13 @@ model2 <-
     data = estimation_data
     )
 ```
+
+## Regression summary
+
+```{r}
+summary(model1)
+```
+
 
 ## Single row model summary
 
@@ -249,4 +343,3 @@ for (i in c(1,2,3)) {
 
 Copy error message and google it.
 
-# Input/output

@@ -5,7 +5,7 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "A quick intro to R"
+    - text: "Kort intro til R"
       href: survey_demo.html
     - text: "About"
       href: about.html
@@ -13,4 +13,5 @@ output:
   html_document:
     toc: true
     toc_float: true
+    number_sections: true
     theme: cosmo
