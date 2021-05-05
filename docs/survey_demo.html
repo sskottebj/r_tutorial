@@ -373,8 +373,8 @@ div.tocify {
 <div id="load-packages" class="section level1" number="1">
 <h1 number="1"><span class="header-section-number">1</span> Load packages</h1>
 <p>I “base”-R - altså den udgave, som kommer med installationen - ligger en masse muligheder for data-manipulation og statistisk analyse. Der bliver dog hele tiden udviklet nye funktioner/funktionaliteter, som løser forskellige typer af problemer, som R-bruger støder på. Mange af disse løsninger deles i pakker, som gratis kan hentes fra nettet. Det kræver følgende: Først skal pakken installeres. Herefter skal pakken hentesn fra dit lokale pakke-bibliotek.</p>
-<p>En pakke installeres ved at eksempelvis at skrive ´install.packages(“MASS”)´. Man behøver kun installere en pakke en gang. Hvis man vil hente nye opdateringer til pakken skal den dog installeres igen.</p>
-<p>Efter pakken er installeret kan man indlæse pakke i ens R-session ved at skrive ´library(MASS)´. Det er god praksis at indlæse sine pakker i starten af sit program.</p>
+<p>En pakke installeres ved at eksempelvis at skrive <code>install.packages("MASS")</code>. Man behøver kun installere en pakke en gang. Hvis man vil hente nye opdateringer til pakken skal den dog installeres igen.</p>
+<p>Efter pakken er installeret kan man indlæse pakke i ens R-session ved at skrive <code>library(MASS)</code>. Det er god praksis at indlæse sine pakker i starten af sit program.</p>
 <p>I dette program indlæses pakkerne som vist nedenfor:</p>
 <pre class="r"><code># install.packages(&quot;MASS&quot;) first if not already installed.
 library(MASS) # Dataset
@@ -382,7 +382,7 @@ library(tidyverse) # Datamanipulation &amp; plots
 library(broom) # Functions to extract model statistics and parameters
 library(stargazer) # Tables for statistical models
 library(naniar) # Visualizing missing data</code></pre>
-<p>Som i mange andre programmer kan man “udkommentere” kode. I R gør man det ved at indsætte ´#´ foran sin kode som vist ovenfor.</p>
+<p>Som i mange andre programmer kan man “udkommentere” kode. I R gør man det ved at indsætte <code>#</code> foran sin kode som vist ovenfor.</p>
 <p>Bemærk i øvrigt at <code>tidyverse</code> (<code>dplyr</code>) “overskriver” en række funktioner fra pakkerne <code>stats</code> og <code>MASS</code></p>
 </div>
 <div id="view-data" class="section level1" number="2">

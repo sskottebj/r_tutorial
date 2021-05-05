@@ -23,12 +23,12 @@ https://csgillespie.github.io/efficientR/learning.html#learning-in-depth
 
 # Interaktiv læring
 
-
+skriv om datacamp, learnr, coursera
 
 
 # Lærebøger
 
-Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R for Data Science". Hvis du vil lære R, så skim et kapitel hver uge og få et overblik over hvad man kan i R og hvordan det kan gøres. Bogen er godt skrevet og dækker en lang række temaer, som man ikke kommer udenom når man bruger R. 
+Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R for Data Science". Hvis du vil lære R, så skim et kapitel hver uge og få et overblik over hvad man kan i R og hvordan det kan gøres.
 
 ## Data Science
 
@@ -58,6 +58,8 @@ https://clauswilke.com/dataviz/
 https://socviz.co/
 
 https://r-graphics.org/
+
+https://ggplot2-book.org/
 
 
 ## Statistik
@@ -110,11 +112,11 @@ RMarkdown
 
 https://bookdown.org/yihui/rmarkdown/
 
-Skriv bøger
+### Skriv onlinebøger
 
 https://bookdown.org/yihui/bookdown/
 
-Lav hjemmesider
+### Lav hjemmesider
 
 https://bookdown.org/yihui/blogdown/
 
@@ -125,4 +127,24 @@ https://engineering-shiny.org/
 ## Kort / Geocomputation
 
 https://geocompr.robinlovelace.net/
+
+## Versionskontrol 
+
+### Git og R
+
+https://happygitwithr.com/#
+
+### Git bogen
+
+https://git-scm.com/book/en/v2
+
+NB: Ikke specifikt relateret til R
+
+### SVN
+
+Ikke specifikt relateret til R
+
+NB: http://svnbook.red-bean.com/
+
+## Cheatsheats
  

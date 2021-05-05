@@ -33,9 +33,9 @@ Det forudsættes, at man har prøve at åbne R/RStudio og arbejder i RStudio. Hv
 
 I "base"-R - altså den udgave, som kommer med installationen - ligger en masse muligheder for data-manipulation og statistisk analyse. Der bliver dog hele tiden udviklet nye funktioner/funktionaliteter, som løser forskellige typer af problemer, som R-bruger støder på. Mange af disse løsninger deles i pakker, som gratis kan hentes fra nettet. Det kræver følgende: Først skal pakken installeres. Herefter skal pakken hentesn fra dit lokale pakke-bibliotek.
 
-En pakke installeres ved at eksempelvis at skrive ´install.packages("MASS")´. Man behøver kun installere en pakke en gang. Hvis man vil hente nye opdateringer til pakken skal den dog installeres igen.
+En pakke installeres ved at eksempelvis at skrive `install.packages("MASS")`. Man behøver kun installere en pakke en gang. Hvis man vil hente nye opdateringer til pakken skal den dog installeres igen.
 
-Efter pakken er installeret kan man indlæse pakke i ens R-session ved at skrive ´library(MASS)´. Det er god praksis at indlæse sine pakker i starten af sit program. 
+Efter pakken er installeret kan man indlæse pakke i ens R-session ved at skrive `library(MASS)`. Det er god praksis at indlæse sine pakker i starten af sit program. 
 
 I dette program indlæses pakkerne som vist nedenfor:
 
@@ -48,7 +48,7 @@ library(stargazer) # Tables for statistical models
 library(naniar) # Visualizing missing data
 ```
 
-Som i mange andre programmer kan man "udkommentere" kode. I R gør man det ved at indsætte ´#´ foran sin kode som vist ovenfor.
+Som i mange andre programmer kan man "udkommentere" kode. I R gør man det ved at indsætte `#` foran sin kode som vist ovenfor.
 
 Bemærk i øvrigt at `tidyverse` (`dplyr`) "overskriver" en række funktioner fra pakkerne `stats` og `MASS`
 
