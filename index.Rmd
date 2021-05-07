@@ -13,18 +13,32 @@ Man kan sagtens installere R og laver sine analyser uden at installere noget som
 Udover RStudio står folkene bag RStudio står bag en lang række ressourcer, som gør R nemmere og mere attraktivt at bruge. Det er eksempelvis pakker til datamanipulation, datavisualisering, machine learning, opsætning af hjemmesider og en lang række andre ting.
 
 
-
 # Installation
 
+R kan installeres gratis fra https://cran.r-project.org/ til både Linux, Mac og Windows. For ansatte i Staten vil Windows-installationen være den relevante. Den skal man dog anmode om adgang til at installere i sit Softwarecenter gennem Statens IT's Serviceportal ved at anmode om "Specialsoftware.
 
-# Læring
+Det anbefales at man også får installeret RStudio, som kan downloades på RStudios hjemmeside: https://www.rstudio.com/products/rstudio/download/. Arbejder man i Staten skal man igen anmode Statens IT om mulighed for at installere RStudio gennem sit Softwarecenter. Når R og RStudio er installeret kan man blot åbne RStudio for at køre R.
 
-https://csgillespie.github.io/efficientR/learning.html#learning-in-depth
 
-# Interaktiv læring
+# Kurser og interaktiv læring
 
-skriv om datacamp, learnr, coursera
+skriv om datacamp, learnr, coursera, RStudio
 
+## RStudio Education
+
+RStudio har et væld af ressourcer. Udover cheatsheets og  gratis onlinebøger (som vi også kommer nærmere ind på senere), så ligger der er lang række videoer og interaktive tutorials på https://rstudio.cloud/learn/primers
+
+RStudio har også lavet pakken `learnr`, som kan installeres og giver adgang til interaktive tutorial direkte i RStudio.
+
+## Datacamp
+
+Datacamp tilbyder kurser, hvor man får mindre oplæg af 3-5 minutters varighed afløst af kodnings-opgaver, hvor man får feedback, hvis man skriver sin kode forkert. Setup'et giver anledning til en blanding af teori og praksis, som giver et effektivt læringsudbytte.
+
+Datacamp har en måneds gratis prøveperiode. Udover R er der også kurser i andre programmeringssprog dog primært Python og SQL (udover R)
+
+## Coursera
+
+Coursera udbyder gratis en række kurser i R, se eksempelvis "Data Science Specialization" fra John Hopkins University.
 
 # Lærebøger
 
@@ -32,52 +46,86 @@ Hvis jeg skulle vælge én bog til at supplere læring i R skulle det være "R f
 
 ## Data Science
 
-R for Data Science
+### R for Data Science
 https://r4ds.had.co.nz/
 
 ## Style guide
 
+Der er mange tilgange til hvordan man bør skrive kode på indenfor og på tværs af forskellige programmeringssprog. Det anbefales at man prøve at følge en "Best Practice". Der er mange gode fif til skrivestil, som både vil hjælpe dig selv og dine kollegaer, hvis i prøver at tilstræbe at følge tidyverse's styleguide:
+
 https://style.tidyverse.org/
 
-Blandt andet fejlmeddelelser.
-
-## Avanceret programmering
-
-Dybereluggnede koncepter i programmering 
-https://adv-r.hadley.nz/
-
-Efficient programmering i R
-https://csgillespie.github.io/efficientR/
-
-https://r-pkgs.org/ 
 
 ## Datavisualisering
 
+Det mest populære grafik-system i R er ggplot2. Der findes dog en lang række forskellige pakker til datavisualisering. Nogle giver endda mulighed for at lave interaktive grafer. 
+
+### ggplot2
+
+I ggplot2-bogen præsenteres Hadley Wickham's populære plotting-system ggplot2. Bogen er relativt nem at komme igennem og udover at lære, hvordan man kan visualisere forskellige data, så præsenteres man også for, hvordan man kan lave gode visualiseringer. I 3-versions online-versionen er danskeren Thomas Lin Pedersen i øvrigt medforfatter.
+
+https://ggplot2-book.org/
+
+### Fundamental of Datavisualisation
+
+Fundamentals of Datavisualisation præsenterer best-practice for data-visualisering på en lang række områder. Det er en god kilde at konsultere, hvis man vil hente inspiration til, hvordan man kan præsenterer sit data. Der er ikke noget R-kode i bogen, men man kan finde kildekoden til bogen på Github, hvis man vil prøve at reproducere nogle af figurerne.
+
 https://clauswilke.com/dataviz/
+
+### Data Visualization
+
+Data visualization er en anden god kilde til hvordan man bør/ikke bør lave datavisualisering.
 
 https://socviz.co/
 
+### R Graphics Cookbook
+
+I R Graphics Cookbook præsenteres en lang række "opskrifter" på hvordan man kan lave en lang række datavisualiseringer med ggplot2.
+
 https://r-graphics.org/
 
-https://ggplot2-book.org/
+### Interactive web-based datavisualisation with R, plotly, and shiny
+
+Denne bog introducerer hvordan man kan lave interaktiv grafik med plotly og shiny.
+
+https://plotly-r.com/
 
 
 ## Statistik
 
-### Tidsserier
+### Forecasting: Principles and Practice
+
+Bogen præsenterer en lang række populære tidsserie-metode, herunder tidsserie-regressions, exponential smoothing og ARIMA-modeller.
 
 https://otexts.com/fpp2/
 
-### Økonometri
+### Introduction to Econometrics with R
+
+Bogen indeholder en lang række af de samme ting som man eksempelvis finder i Wooldrigdes populære "Introductory Econometrics". Herudover er der også interaktive øvelser i bogen, hvor man koder direkte i bogen.
 
 https://www.econometrics-with-r.org/
 
 ###  Causal inference
 
-Causal inference: The mixtape
-https://mixtape.scunning.com/dag.html
+### Statistical Inference via Data Science
 
+Bogen præsenterer statistisk inference med R.
+
+https://moderndive.com/
+
+### Causal inference: The mixtape
+
+Bog repræsenterer værktøjer til kausal inferens i den socialvidenskabelige forskning. Bogen har kodeeksempler i både R og Stata
+
+https://mixtape.scunning.com/
+
+
+```{r, eval=FALSE, echo=FALSE}
 https://cdn1.sph.harvard.edu/wp-content/uploads/sites/1268/2021/03/ciwhatif_hernanrobins_30mar21.pdf
+
+```
+
+
 
 
 ## Machine Learning
@@ -122,11 +170,23 @@ https://bookdown.org/yihui/blogdown/
 
 ## Shiny
 
+https://mastering-shiny.org/
+
 https://engineering-shiny.org/
 
 ## Kort / Geocomputation
 
 https://geocompr.robinlovelace.net/
+
+## Avanceret programmering
+
+Dybereluggnede koncepter i programmering 
+https://adv-r.hadley.nz/
+
+Efficient programmering i R
+https://csgillespie.github.io/efficientR/
+
+https://r-pkgs.org/ 
 
 ## Versionskontrol 
 
@@ -145,6 +205,12 @@ NB: Ikke specifikt relateret til R
 Ikke specifikt relateret til R
 
 NB: http://svnbook.red-bean.com/
+
+## Databaser og R
+
+https://db.rstudio.com/
+
+https://therinspark.com/
 
 ## Cheatsheats
  

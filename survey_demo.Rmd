@@ -157,10 +157,22 @@ survey %>%
 
 Funktionen `everything` tager resten af observationerne i den oprindelige rækkefølge og sætter efter `Age` og `Smoke`.
 
+For mere info, så læs kapitlet https://r4ds.had.co.nz/transform.html, som beskriver disse funktioner nærmere samt hvordan du tilføjer nye variable til et datasæt, beregner aggregerede størrelser og hvordan man kan lave grupperede operationer med group_by (som man også kender det fra SQL og SAS)
 
 # Load and save data
 
+## save data
+
+Der ligger en række funktioner i base-R til at læse og skrive data med. Der findes dog en række pakker, som give hurtigere, mere konsistent og mere fleksibel indlæsning. Pakken `readr` sørger eksempelvis for, at filer gemt i UTF-8 også indlæses i samme format, hvilket bevare æøå. `vroom` og `data.table` kan lynhurtigt indlæse store datasæt og `readxl` kan indlæse .xlsx og .xls filer. `haven`-pakken indlæse filer fra en lang række andre som eksempelvis Stata, SPSS og SAS-filer. Man kan også indlæse data fra en SQL-database med dbplyr. R har også sine egne native-formatter .RData og .rds. Det kan være en fordel, hvis man vil gemme machine learning / statistiske modeller, men er sjældent en fordel, hvis man blot vil gemme almindelige datasæt. Typisk vil de fylde mindre end eksempelvis .cvs-filer, men hvis plads-begrænsning er en faktor bør man overveje at gemme i en SQL-database. Man kan relativt nemt lave en SQLite-databaser med pakken `RSQLite`.
+
+```{r}
+
+```
+
+
 TODO write_csv, read_csv
+
+
 \pagebreak
 
 # Visuzalize missing data
