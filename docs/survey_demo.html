@@ -546,56 +546,161 @@ library(naniar) # Visualizing missing data</code></pre>
 ## 5 165.00   Metric
 ## 6 172.72 Imperial</code></pre>
 <p>Funktionen <code>everything</code> tager resten af observationerne i den oprindelige rækkefølge og sætter efter <code>Age</code> og <code>Smoke</code>.</p>
+<p>For mere info, så læs kapitlet <a href="https://r4ds.had.co.nz/transform.html" class="uri">https://r4ds.had.co.nz/transform.html</a>, som beskriver disse funktioner nærmere samt hvordan du tilføjer nye variable til et datasæt, beregner aggregerede størrelser og hvordan man kan lave grupperede operationer med group_by (som man også kender det fra SQL og SAS)</p>
 </div>
 </div>
 <div id="load-and-save-data" class="section level1" number="4">
 <h1 number="4"><span class="header-section-number">4</span> Load and save data</h1>
-<p>TODO write_csv, read_csv </p>
+<div id="save-data" class="section level2" number="4.1">
+<h2 number="4.1"><span class="header-section-number">4.1</span> save data</h2>
+<p>Der ligger en række funktioner i base-R til at læse og skrive data med. Der findes dog en række pakker, som give hurtigere, mere konsistent og mere fleksibel indlæsning. Pakken <code>readr</code> sørger eksempelvis for, at filer gemt i UTF-8 også indlæses i samme format, hvilket bevare æøå. <code>vroom</code> og <code>data.table</code> kan lynhurtigt indlæse store datasæt og <code>readxl</code> kan indlæse .xlsx og .xls filer. <code>haven</code>-pakken indlæse filer fra en lang række andre som eksempelvis Stata, SPSS og SAS-filer. Man kan også indlæse data fra en SQL-database med dbplyr.</p>
+<p>R har også sine egne native-formatter .RData og .rds. Det kan være en fordel, hvis man vil gemme machine learning / statistiske modeller, men er sjældent en fordel, hvis man blot vil gemme almindelige datasæt. Typisk vil de fylde mindre end eksempelvis .cvs-filer, men hvis plads-begrænsning er en faktor bør man overveje at gemme i en SQL-database. Man kan relativt nemt lave en SQLite-databaser med pakken <code>RSQLite</code>.</p>
+<p>Eksemplet nedenfor viser hvordan man kan skrive data til en csv-fil</p>
+<pre class="r"><code>write_csv(survey, &quot;survey_data.csv&quot;)</code></pre>
+<pre class="r"><code>survey_from_csv &lt;- read_csv(&quot;survey_data.csv&quot;)</code></pre>
+<pre><code>## 
+## -- Column specification ------------------------------------------------
+## cols(
+##   Sex = col_character(),
+##   Wr.Hnd = col_double(),
+##   NW.Hnd = col_double(),
+##   W.Hnd = col_character(),
+##   Fold = col_character(),
+##   Pulse = col_double(),
+##   Clap = col_character(),
+##   Exer = col_character(),
+##   Smoke = col_character(),
+##   Height = col_double(),
+##   M.I = col_character(),
+##   Age = col_double()
+## )</code></pre>
+<p>Nedenfor indlæses data igen.</p>
+<pre class="r"><code>survey_from_csv &lt;- read_csv(&quot;survey_data.csv&quot;)</code></pre>
+<pre><code>## 
+## -- Column specification ------------------------------------------------
+## cols(
+##   Sex = col_character(),
+##   Wr.Hnd = col_double(),
+##   NW.Hnd = col_double(),
+##   W.Hnd = col_character(),
+##   Fold = col_character(),
+##   Pulse = col_double(),
+##   Clap = col_character(),
+##   Exer = col_character(),
+##   Smoke = col_character(),
+##   Height = col_double(),
+##   M.I = col_character(),
+##   Age = col_double()
+## )</code></pre>
+<p>Med funktionen <code>head</code> ser vi på det nyt-indlæste data:</p>
+<pre class="r"><code>head(survey_from_csv)</code></pre>
+<pre><code>## # A tibble: 6 x 12
+##   Sex    Wr.Hnd NW.Hnd W.Hnd Fold   Pulse Clap  Exer  Smoke Height M.I  
+##   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;
+## 1 Female   18.5   18   Right R on L    92 Left  Some  Never   173  Metr~
+## 2 Male     19.5   20.5 Left  R on L   104 Left  None  Regul   178. Impe~
+## 3 Male     18     13.3 Right L on R    87 Neit~ None  Occas    NA  &lt;NA&gt; 
+## 4 Male     18.8   18.9 Right R on L    NA Neit~ None  Never   160  Metr~
+## 5 Male     20     20   Right Neith~    35 Right Some  Never   165  Metr~
+## 6 Female   18     17.7 Right L on R    64 Right Some  Never   173. Impe~
+## # ... with 1 more variable: Age &lt;dbl&gt;</code></pre>
+<p>Bemærk i øvrigt at at der står en række column-specifications. Det er en beskrivelse af, hvordan data indlæses. Hvis man indlæser løbenumre kan det typisk anbefales at indlæses dem som character-variable. Det skyldes at foranstillede 0’er fjernes, hvis en variabel indlæses som double eller integer.</p>
+<p>Indlæsningsmetoden kan manipuleres med <code>col_types</code> argumenter. I eksemplet nedenfor indlæses variablen Wr.Hnd og NW.Hnd som character frem for doubles.</p>
+<pre class="r"><code>survey_from_csv_chr &lt;- read_csv(&quot;survey_data.csv&quot;, 
+                                col_types = cols(
+                                Wr.Hnd = col_character(),
+                                NW.Hnd = col_character()
+))</code></pre>
+<p>Funktionen <code>glimpse</code> viser hvilket format data er opsat i i datasættet. Nedenfor kan vi se, at Wr.Hnd og NW.Hnd er indlæst som characters i stedet for doubles.</p>
+<pre class="r"><code>glimpse(survey_from_csv_chr)</code></pre>
+<pre><code>## Rows: 237
+## Columns: 12
+## $ Sex    &lt;chr&gt; &quot;Female&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Male&quot;, &quot;Female&quot;, &quot;Ma~
+## $ Wr.Hnd &lt;chr&gt; &quot;18.5&quot;, &quot;19.5&quot;, &quot;18&quot;, &quot;18.8&quot;, &quot;20&quot;, &quot;18&quot;, &quot;17.7&quot;, &quot;17&quot;,~
+## $ NW.Hnd &lt;chr&gt; &quot;18&quot;, &quot;20.5&quot;, &quot;13.3&quot;, &quot;18.9&quot;, &quot;20&quot;, &quot;17.7&quot;, &quot;17.7&quot;, &quot;17~
+## $ W.Hnd  &lt;chr&gt; &quot;Right&quot;, &quot;Left&quot;, &quot;Right&quot;, &quot;Right&quot;, &quot;Right&quot;, &quot;Right&quot;, &quot;R~
+## $ Fold   &lt;chr&gt; &quot;R on L&quot;, &quot;R on L&quot;, &quot;L on R&quot;, &quot;R on L&quot;, &quot;Neither&quot;, &quot;L o~
+## $ Pulse  &lt;dbl&gt; 92, 104, 87, NA, 35, 64, 83, 74, 72, 90, 80, 68, NA, 66~
+## $ Clap   &lt;chr&gt; &quot;Left&quot;, &quot;Left&quot;, &quot;Neither&quot;, &quot;Neither&quot;, &quot;Right&quot;, &quot;Right&quot;,~
+## $ Exer   &lt;chr&gt; &quot;Some&quot;, &quot;None&quot;, &quot;None&quot;, &quot;None&quot;, &quot;Some&quot;, &quot;Some&quot;, &quot;Freq&quot;,~
+## $ Smoke  &lt;chr&gt; &quot;Never&quot;, &quot;Regul&quot;, &quot;Occas&quot;, &quot;Never&quot;, &quot;Never&quot;, &quot;Never&quot;, &quot;~
+## $ Height &lt;dbl&gt; 173.00, 177.80, NA, 160.00, 165.00, 172.72, 182.88, 157~
+## $ M.I    &lt;chr&gt; &quot;Metric&quot;, &quot;Imperial&quot;, NA, &quot;Metric&quot;, &quot;Metric&quot;, &quot;Imperial~
+## $ Age    &lt;dbl&gt; 18.250, 17.583, 16.917, 20.333, 23.667, 21.000, 18.833,~</code></pre>
+<p>Læs mere om indlæsning/skrivning til filer/databaser her:</p>
+<div style="page-break-after: always;"></div>
+</div>
 </div>
 <div id="visuzalize-missing-data" class="section level1" number="5">
 <h1 number="5"><span class="header-section-number">5</span> Visuzalize missing data</h1>
+<p><code>nanair</code> giver mulighed for nogle effektive løsninger at visualisere missing-data i ens datasæt. Særligt funktionen <code>vis_miss</code> kan give indsigt i, hvordan missing-strukturen ser ud på tværs af variable. Grafikken nedenfor viser for hver observation, hvilke kolonner, der har en missing-værdi. Eksemelvis er <code>Height</code> og <code>M.I</code> næsten altid missing sammen. Det skyldes det simple forhold, at <code>Height</code> angiver højde og <code>M.I</code> er måleenheden, som naturligvis ikke er angivet, hvis der heller ikke er angivet en højde.</p>
 <pre class="r"><code>vis_miss(survey)</code></pre>
-<p><img src="survey_demo_files/figure-html/unnamed-chunk-12-1.png" width="672" /> </p>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Læs mere om pakken her:</p>
+<p><a href="https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html" class="uri">https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html</a></p>
+<div style="page-break-after: always;"></div>
 </div>
 <div id="statistical-modeling" class="section level1" number="6">
 <h1 number="6"><span class="header-section-number">6</span> Statistical modeling</h1>
+<p>R er udviklet af statistikere til netop at lave statistik. I det følgende illustreres, hvordan man kan lave og rapportere en logistisk regression.</p>
 <div id="remove-missing" class="section level2" number="6.1">
 <h2 number="6.1"><span class="header-section-number">6.1</span> Remove missing</h2>
+<p>Første trin er at klargøre sit datasæt. Typisk skal man finde en måde at håndtere missing data før man kan lave sin regression. I eksemplet her vælger ikke at bruge variablene <code>Pulse</code>, `<code>M.I</code> eller <code>Height</code>, hvor andelen af missing er høj. Derefter fjerne vi de observationer, som har missing-værdier i en eller flere af de resterende variable.</p>
+<p>Før vi gør noget består datasættet a 237 rækker og 12 kolonner.</p>
+<pre class="r"><code>survey %&gt;% dim()</code></pre>
+<pre><code>## [1] 237  12</code></pre>
+<p>Efter vi har fjernet de relevante variable og rækker med missing-værdier fra de øvrige variable, har datasættet 233 rækker og 9 observationer.</p>
 <pre class="r"><code>estimation_data &lt;- 
   survey %&gt;% 
   select(-Pulse, -M.I, - Height) %&gt;% # Remove columns
   filter(!if_any(everything(),
                     ~ is.na(.)
                  )) # Remove obs with any missing
-estimation_data %&gt;% head()</code></pre>
-<pre><code>##      Sex Wr.Hnd NW.Hnd W.Hnd    Fold    Clap Exer Smoke    Age
-## 1 Female   18.5   18.0 Right  R on L    Left Some Never 18.250
-## 2   Male   19.5   20.5  Left  R on L    Left None Regul 17.583
-## 3   Male   18.0   13.3 Right  L on R Neither None Occas 16.917
-## 4   Male   18.8   18.9 Right  R on L Neither None Never 20.333
-## 5   Male   20.0   20.0 Right Neither   Right Some Never 23.667
-## 6 Female   18.0   17.7 Right  L on R   Right Some Never 21.000</code></pre>
+estimation_data %&gt;% dim()</code></pre>
+<pre><code>## [1] 233   9</code></pre>
+<p>I det følgende behandler vi <code>W.Hnd</code>, skrivehånden, som den afhængige variabel (<code>y</code>) og de resterende variable som de uafhængige variable (<code>x</code>).</p>
+<p>Nedenfor beregnes andelen af personer som er hhv. højre og venstrehåndet. Først laves en simpel optælling med funktionen <code>count</code>, som beregner variablen <code>n</code>. Med funktionen <code>mutate</code> beregner vi variablen <code>share</code> (tænk på datasættet muterer ligesom en celle og får nye egenskaber). Omkring 7 pct. er venstrehåndede og resten er højrehåndede.</p>
 <pre class="r"><code>estimation_data %&gt;% 
   count(W.Hnd) %&gt;% 
   mutate(share = n / sum(n))</code></pre>
 <pre><code>##   W.Hnd   n      share
 ## 1  Left  17 0.07296137
 ## 2 Right 216 0.92703863</code></pre>
+<p>Læs mere om <code>mutate</code> funktionen her:</p>
+<p><a href="https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate" class="uri">https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate</a></p>
 </div>
 <div id="visualize-data" class="section level2" number="6.2">
 <h2 number="6.2"><span class="header-section-number">6.2</span> Visualize data</h2>
-<pre class="r"><code>estimation_data %&gt;% 
-  mutate(W.Hnd_numeric = W.Hnd %&gt;% as.numeric() - 1 ) %&gt;% # Make variable 0-based
+<p>Vi prøver først at visualisere skrivehånden op mod alder laver vi først en 0-1 baseret numerisk variabel. Først transformeres variablen til en numerisk variablen med <code>as.numeric</code>. Da R er 1 snarere en 0-baseret, trækker vi en fra så variablen får værdien 0 eller 1 snarere end 1 eller 2. Her bliver venstre 0 og højre 1.</p>
+<pre class="r"><code>viz_data &lt;-
+  estimation_data %&gt;% 
+  mutate(W.Hnd_numeric = W.Hnd %&gt;% as.numeric() - 1 ) # Make variable 0-based</code></pre>
+<p>Nedenfor anvendes det populære plotting-system <code>ggplot2</code> til at visualisere skrivehånd mod alder. Vi sender <code>viz_data</code> ind i <code>ggplot</code>-funktionen, som det datasæt vi skal visualisere. Herefter angiver vi variable, der skal mappes til <code>x</code>-aksen og <code>y</code>-aksen i <code>aes</code> funktionen. <code>aes</code> står for aethetics og kan løst oversættes til, den dimension vi vil mappe en variabel til. Andre aesthetics er eksempelvis <code>size</code>, <code>linetype</code> og <code>colour</code>.</p>
+<p>Vi tilføjer datapunkter med funktionen <code>geom_point()</code> og endelig laver indsætter vi en smoother med <code>geom_smooth</code>. I dette tilfælde bruges en binomial glm-model (logistisk regression).</p>
+<p>Umiddelbart kan vi se, at kun meger unge personer bruger venstre hånd som deres skrivehånd. Det kan måske skyldes, at som er ældre end starten af 20’erne i dette datasæt ar været tvunget til at bruge deres højre hånd som skrivehånd.</p>
+<pre class="r"><code>viz_data %&gt;% 
   ggplot(aes(x = Age, y = W.Hnd_numeric)) +
   geom_point() +
   geom_smooth(method = &quot;glm&quot;,
                method.args = list(family = &quot;binomial&quot;),
               se = FALSE)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="survey_demo_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Datapunkterne klumper sig lidt sammen, hvilket kan gøre det svært at få en fornemmelse af, hvor mange punkter der er. Dette fænomen referes som overplotting. En mulighed er at tilføje lidt “støj” til punkterne, så de nemmere kan ses. Dette gøres med <code>geom_jitter()</code>. Samtidig kan vi gøre datapunkterne mere transparente med argumentet <code>alpha</code></p>
+<pre class="r"><code>viz_data %&gt;% 
+  ggplot(aes(x = Age, y = W.Hnd_numeric)) +
+  geom_jitter(height = 0.1, alpha = 0.3) +
+  geom_smooth(method = &quot;glm&quot;,
+               method.args = list(family = &quot;binomial&quot;),
+              se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Se andre teknikker/forslag til at håndtere overplotting her: <a href="https://r-graphics.org/recipe-scatter-overplot" class="uri">https://r-graphics.org/recipe-scatter-overplot</a></p>
+<p>For en mere generel intro til ggplot og grafik med R, så læs kapitlet her: <a href="https://r4ds.had.co.nz/data-visualisation.html" class="uri">https://r4ds.had.co.nz/data-visualisation.html</a></p>
 </div>
 <div id="run-regression-logit" class="section level2" number="6.3">
 <h2 number="6.3"><span class="header-section-number">6.3</span> Run regression (logit)</h2>
+<p>I eksemplet nedenfor laver vi en logistisk regression, hvor vi har skrivehånd <code>W.Hnd</code> som vores <code>y</code> og <code>Sex</code>, <code>Fold</code>, <code>Clap</code>, <code>Exer</code>, <code>Smoke</code> og <code>Age</code> som kovariater. Default outputtet illusteres vises nedenfor, hvor parametrenes logit-værdi er estimeret.</p>
 <pre class="r"><code>model1 &lt;-
   glm(formula = W.Hnd ~ Sex + Fold + Clap + Exer + Smoke + Age,
     family = &quot;binomial&quot;, 
@@ -722,7 +827,7 @@ head(model1_augmented)</code></pre>
   labs(x = &quot;Predicted&quot;,
        y = &quot;Observed&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="survey_demo_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p>Stratify further by exercise</p>
 <pre class="r"><code>model1_augmented %&gt;% 
   mutate(W.Hnd_int = W.Hnd %&gt;% as.integer() - 1) %&gt;% 
@@ -738,7 +843,7 @@ head(model1_augmented)</code></pre>
   labs(x = &quot;Predicted&quot;,
        y = &quot;Observed&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="survey_demo_files/figure-html/unnamed-chunk-23-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p><img src="survey_demo_files/figure-html/unnamed-chunk-32-1.png" width="384" style="display: block; margin: auto;" /></p>
 </div>
 <div id="statistical-tables-for-publication" class="section level2" number="6.9">
 <h2 number="6.9"><span class="header-section-number">6.9</span> Statistical tables for publication</h2>

@@ -163,30 +163,83 @@ For mere info, så læs kapitlet https://r4ds.had.co.nz/transform.html, som besk
 
 ## save data
 
-Der ligger en række funktioner i base-R til at læse og skrive data med. Der findes dog en række pakker, som give hurtigere, mere konsistent og mere fleksibel indlæsning. Pakken `readr` sørger eksempelvis for, at filer gemt i UTF-8 også indlæses i samme format, hvilket bevare æøå. `vroom` og `data.table` kan lynhurtigt indlæse store datasæt og `readxl` kan indlæse .xlsx og .xls filer. `haven`-pakken indlæse filer fra en lang række andre som eksempelvis Stata, SPSS og SAS-filer. Man kan også indlæse data fra en SQL-database med dbplyr. R har også sine egne native-formatter .RData og .rds. Det kan være en fordel, hvis man vil gemme machine learning / statistiske modeller, men er sjældent en fordel, hvis man blot vil gemme almindelige datasæt. Typisk vil de fylde mindre end eksempelvis .cvs-filer, men hvis plads-begrænsning er en faktor bør man overveje at gemme i en SQL-database. Man kan relativt nemt lave en SQLite-databaser med pakken `RSQLite`.
+Der ligger en række funktioner i base-R til at læse og skrive data med. Der findes dog en række pakker, som give hurtigere, mere konsistent og mere fleksibel indlæsning. Pakken `readr` sørger eksempelvis for, at filer gemt i UTF-8 også indlæses i samme format, hvilket bevare æøå. `vroom` og `data.table` kan lynhurtigt indlæse store datasæt og `readxl` kan indlæse .xlsx og .xls filer. `haven`-pakken indlæse filer fra en lang række andre som eksempelvis Stata, SPSS og SAS-filer. Man kan også indlæse data fra en SQL-database med dbplyr. 
+
+R har også sine egne native-formatter .RData og .rds. Det kan være en fordel, hvis man vil gemme machine learning / statistiske modeller, men er sjældent en fordel, hvis man blot vil gemme almindelige datasæt. Typisk vil de fylde mindre end eksempelvis .cvs-filer, men hvis plads-begrænsning er en faktor bør man overveje at gemme i en SQL-database. Man kan relativt nemt lave en SQLite-databaser med pakken `RSQLite`.
+
+Eksemplet nedenfor viser hvordan man kan skrive data til en csv-fil
 
 ```{r}
+write_csv(survey, "survey_data.csv")
+```
 
+```{r}
+survey_from_csv <- read_csv("survey_data.csv")
+```
+
+Nedenfor indlæses data igen. 
+
+```{r}
+survey_from_csv <- read_csv("survey_data.csv")
+```
+
+Med funktionen `head` ser vi på det nyt-indlæste data:
+
+```{r}
+head(survey_from_csv)
 ```
 
 
-TODO write_csv, read_csv
+Bemærk i øvrigt at at der står en række column-specifications. Det er en beskrivelse af, hvordan data indlæses. Hvis man indlæser løbenumre kan det typisk anbefales at indlæses dem som character-variable. Det skyldes at foranstillede 0'er fjernes, hvis en variabel indlæses som double eller integer.
 
+Indlæsningsmetoden kan manipuleres med `col_types` argumenter. I eksemplet nedenfor indlæses variablen Wr.Hnd og NW.Hnd som character frem for doubles.
+
+```{r}
+survey_from_csv_chr <- read_csv("survey_data.csv", 
+                                col_types = cols(
+                                Wr.Hnd = col_character(),
+                                NW.Hnd = col_character()
+))
+```
+
+Funktionen `glimpse` viser hvilket format data er opsat i i datasættet. Nedenfor kan vi se, at Wr.Hnd og NW.Hnd er indlæst som characters i stedet for doubles.
+
+```{r}
+glimpse(survey_from_csv_chr)
+```
+
+Læs mere om indlæsning/skrivning til filer/databaser her:
 
 \pagebreak
 
 # Visuzalize missing data
 
+`nanair` giver mulighed for nogle effektive løsninger at visualisere missing-data i ens datasæt. Særligt funktionen `vis_miss` kan give indsigt i, hvordan missing-strukturen ser ud på tværs af variable. Grafikken nedenfor viser for hver observation, hvilke kolonner, der har en missing-værdi. Eksemelvis er `Height` og `M.I` næsten altid missing sammen. Det skyldes det simple forhold, at `Height` angiver højde og `M.I` er måleenheden, som naturligvis ikke er angivet, hvis der heller ikke er angivet en højde. 
 
 ```{r}
 vis_miss(survey)
 ```
+
+Læs mere om pakken her:
+
+https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html
+
 \pagebreak
 
 # Statistical modeling
 
+R er udviklet af statistikere til netop at lave statistik. I det følgende illustreres, hvordan man kan lave og rapportere en logistisk regression.
 
 ## Remove missing
+
+Første trin er at klargøre sit datasæt. Typisk skal man finde en måde at håndtere missing data før man kan lave sin regression. I eksemplet her vælger ikke at bruge variablene `Pulse`, ``M.I` eller `Height`, hvor andelen af missing er høj. Derefter fjerne vi de observationer, som har missing-værdier i en eller flere af de resterende variable.
+
+Før vi gør noget består datasættet a 237 rækker og 12 kolonner.
+
+```{r}
+survey %>% dim()
+```
+Efter vi har fjernet de relevante variable og rækker med missing-værdier fra de øvrige variable, har datasættet 233 rækker og 9 observationer.
 
 ```{r}
 estimation_data <- 
@@ -195,8 +248,11 @@ estimation_data <-
   filter(!if_any(everything(),
                     ~ is.na(.)
                  )) # Remove obs with any missing
-estimation_data %>% head()
+estimation_data %>% dim()
 ```
+I det følgende behandler vi `W.Hnd`, skrivehånden, som den afhængige variabel (`y`) og de resterende variable som de uafhængige variable (`x`).
+
+Nedenfor beregnes andelen af personer som er hhv. højre og venstrehåndet. Først laves en simpel optælling med funktionen `count`, som beregner variablen `n`. Med funktionen `mutate` beregner vi variablen `share` (tænk på datasættet muterer ligesom en celle og får nye egenskaber). Omkring 7 pct. er venstrehåndede og resten er højrehåndede.
 
 ```{r}
 estimation_data %>% 
@@ -204,11 +260,28 @@ estimation_data %>%
   mutate(share = n / sum(n))
 ```
 
+Læs mere om `mutate` funktionen her:
+
+https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate
+
 ## Visualize data
 
+Vi prøver først at visualisere skrivehånden op mod alder laver vi først en 0-1 baseret numerisk variabel. Først transformeres variablen til en numerisk variablen med `as.numeric`. Da R er 1 snarere en 0-baseret, trækker vi en fra så variablen får værdien 0 eller 1 snarere end 1 eller 2. Her bliver venstre 0 og højre 1.
+
 ```{r}
-estimation_data %>% 
-  mutate(W.Hnd_numeric = W.Hnd %>% as.numeric() - 1 ) %>% # Make variable 0-based
+viz_data <-
+  estimation_data %>% 
+  mutate(W.Hnd_numeric = W.Hnd %>% as.numeric() - 1 ) # Make variable 0-based
+```
+
+Nedenfor anvendes det populære plotting-system `ggplot2` til at visualisere skrivehånd mod alder. Vi sender `viz_data` ind i `ggplot`-funktionen, som det datasæt vi skal visualisere. Herefter angiver vi variable, der skal mappes til `x`-aksen og `y`-aksen i `aes` funktionen. `aes`  står for aethetics og kan løst oversættes til, den dimension vi vil mappe en variabel til. Andre aesthetics er eksempelvis `size`, `linetype` og `colour`.
+
+Vi tilføjer datapunkter med funktionen `geom_point()` og endelig laver indsætter vi en smoother med `geom_smooth`. I dette tilfælde bruges en binomial glm-model (logistisk regression).
+
+Umiddelbart kan vi se, at kun meger unge personer bruger venstre hånd som deres skrivehånd. Det kan måske skyldes, at som er ældre end starten af 20'erne i dette datasæt ar været tvunget til at bruge deres højre hånd som skrivehånd.
+
+```{r}
+viz_data %>% 
   ggplot(aes(x = Age, y = W.Hnd_numeric)) +
   geom_point() +
   geom_smooth(method = "glm",
@@ -216,7 +289,24 @@ estimation_data %>%
               se = FALSE)
 ```
 
+Datapunkterne klumper sig lidt sammen, hvilket kan gøre det svært at få en fornemmelse af, hvor mange punkter der er. Dette fænomen referes som overplotting. En mulighed er at tilføje lidt "støj" til punkterne, så de nemmere kan ses. Dette gøres med `geom_jitter()`. Samtidig kan vi gøre datapunkterne mere transparente med argumentet `alpha` 
+
+```{r}
+viz_data %>% 
+  ggplot(aes(x = Age, y = W.Hnd_numeric)) +
+  geom_jitter(height = 0.1, alpha = 0.3) +
+  geom_smooth(method = "glm",
+               method.args = list(family = "binomial"),
+              se = FALSE)
+```
+
+Se andre teknikker/forslag til at håndtere overplotting her: https://r-graphics.org/recipe-scatter-overplot
+
+For en mere generel intro til ggplot og grafik med R, så læs kapitlet her: https://r4ds.had.co.nz/data-visualisation.html
+
 ## Run regression (logit)
+
+I eksemplet nedenfor laver vi en logistisk regression, hvor vi har skrivehånd `W.Hnd` som vores `y` og `Sex`, `Fold`, `Clap`, `Exer`, `Smoke` og `Age` som kovariater. Default outputtet illusteres vises nedenfor, hvor parametrenes logit-værdi er estimeret.
 
 ```{r}
 model1 <-
@@ -226,6 +316,8 @@ model1 <-
     )
 model1 # default output
 ```
+
+ 
 
 ```{r}
 model2 <-
@@ -240,7 +332,6 @@ model2 <-
 ```{r}
 summary(model1)
 ```
-
 
 ## Single row model summary
 

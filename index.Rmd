@@ -22,7 +22,7 @@ Det anbefales at man også får installeret RStudio, som kan downloades på RStu
 
 # Kurser og interaktiv læring
 
-skriv om datacamp, learnr, coursera, RStudio
+Der findes en lang række muligheder for at tage kurser online. Der er voksende fokus på *interaktive* læringsformer, hvor man koder i browseren og dermed får prøvet nogle af de ting af, som men præsenteres for. Dette afsnit beskriver en række både gratis og betalt løsninger, hvor man kan lære mere om R.
 
 ## RStudio Education
 
@@ -115,7 +115,7 @@ https://moderndive.com/
 
 ### Causal inference: The mixtape
 
-Bog repræsenterer værktøjer til kausal inferens i den socialvidenskabelige forskning. Bogen har kodeeksempler i både R og Stata
+Bog præsenterer værktøjer til kausal inferens i den socialvidenskabelige forskning. Bogen har kodeeksempler i både R og Stata
 
 https://mixtape.scunning.com/
 
@@ -130,14 +130,19 @@ https://cdn1.sph.harvard.edu/wp-content/uploads/sites/1268/2021/03/ciwhatif_hern
 
 ## Machine Learning
 
-Tidy Modeling with R
+Bogen præsenterer workflowet når man lave machine learning. Særligt kaptel 1-3 kan anbefales, hvis man vil prøve at få et overblik over workflowet og modellerings-processen når man lavet machine learning. Herudover beskriver bogen, forskellige strategier til feature-engineering og variabel-selektion, som kan forbedre ens modellers prædiktionsevne. Bogen beskriver dog ikke forskellige machine learning algoritmer i detaljer. Bogen er lavet i R, men der er ikke R-kode i bogen.
+
+Feature Engineering and Selection: A Practical Approach for Predictive Models 
+http://www.feat.engineering/
+
+### Tidy Modeling with R
+
 https://www.tmwr.org/
 
 An Introduction to statistical Learning
 https://www.statlearning.com/ (gratis pdf på hjemmesiden)
 
-Feature Engineering and Selection: A Practical Approach for Predictive Models 
-http://www.feat.engineering/
+
 Tip: Hvis du er interesseret i prædiktiv modellering / machine learning, så læs kapitel 1-3 for et overblik over modelleringsprocessen. 
 
 Targeted learning in R
@@ -159,6 +164,10 @@ https://geocompr.robinlovelace.net/
 RMarkdown
 
 https://bookdown.org/yihui/rmarkdown/
+
+## Rmarkdown for Scientists
+
+https://rmd4sci.njtierney.com/
 
 ### Skriv onlinebøger
 
@@ -213,4 +222,10 @@ https://db.rstudio.com/
 https://therinspark.com/
 
 ## Cheatsheats
+
+## Big Book of R
+
+En oversigt lignende denne, hvor man kan finde bøger om R og tilknyttede emner. Henviser dog også til betalte løsninger.
+
+https://www.bigbookofr.com/
  
